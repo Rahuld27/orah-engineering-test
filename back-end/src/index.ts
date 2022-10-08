@@ -6,6 +6,8 @@ import * as cors from "cors"
 import { Request, Response } from "express"
 import { Routes } from "./routes"
 import { Student } from "./entity/student.entity"
+import { Group } from "./entity/group.entity"
+import { GroupStudent } from "./entity/group-student.entity"
 
 createConnection()
   .then(async (connection) => {
@@ -137,6 +139,68 @@ createConnection()
             first_name: "Boz",
             last_name: "Scaggs",
             photo_url: "",
+          })
+        )
+      }
+    })
+
+    await connection.manager.find(Group).then(async (group) => {
+      console.log("We have " + group.length + " group")
+      if (group.length === 0) {
+        await connection.manager.save(
+          connection.manager.create(Group, {
+            name: "Present",
+            number_of_weeks: 1,
+            roll_states: "present",
+            incidents: 1,
+            ltmt: "<",
+            run_at: "",
+            student_count: 5
+          })
+        )
+        await connection.manager.save(
+          connection.manager.create(Group, {
+            name: "Absentees",
+            number_of_weeks: 1,
+            roll_states: "absent",
+            incidents: 1,
+            ltmt: ">",
+            run_at: "",
+            student_count: 10
+          })
+        )
+      }
+    })
+
+    await connection.manager.find(GroupStudent).then(async (groupStudent) => {
+      console.log("We have " + groupStudent.length + " group")
+      if (groupStudent.length === 0) {
+        await connection.manager.save(
+          connection.manager.create(GroupStudent, {
+            student_id: 1,
+            group_id: 1,
+            incident_count: 1
+          })
+        )
+        await connection.manager.save(
+          connection.manager.create(GroupStudent, {
+            student_id: 2,
+            group_id: 2,
+            incident_count: 1
+          })
+        )
+        await connection.manager.save(
+          connection.manager.create(GroupStudent, {
+            student_id: 3,
+            group_id: 3,
+            incident_count: 1
+          })
+        )
+        await connection.manager.save(
+          connection.manager.create(GroupStudent, {
+            student_id: 4,
+            group_id: 4,
+            incident_count: 2
           })
         )
       }
